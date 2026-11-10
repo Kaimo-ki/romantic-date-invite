@@ -3,31 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f8e7e4">
-  <meta name="description" content="Маленькое романтичное приглашение на свидание — только для тебя.">
-  <title>Пойдёшь со мной на свидание? ♡</title>
+  <meta name="theme-color" content="#fff8f3">
+  <meta name="description" content="Нежное интерактивное приглашение на свидание — выбери день, настроение и открой маленький сюрприз.">
+  <title>Маленькое свидание — приглашение</title>
   <style>
     :root {
       color-scheme: light;
-      --ink: #51383c;
-      --muted: #90777a;
-      --rose: #d96c7d;
-      --deep-rose: #b54e62;
-      --paper: #fffaf5;
-      --cream: #f9eee6;
-      --blush: #f7dce0;
-      --line: #f0dce0;
-      --page-bg: #f5e1df;
-      --glow-a: rgba(255,255,255,.7);
-      --glow-b: rgba(239,174,185,.34);
-      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-      --sans: "Aptos", "Segoe UI", system-ui, sans-serif;
+      --ink: #352038;
+      --muted: #887d8c;
+      --wine: #6b3153;
+      --berry: #a43d68;
+      --coral: #f36b7c;
+      --peach: #ffb18d;
+      --blush: #f9d9df;
+      --cream: #fff8f3;
+      --paper: #fffdfb;
+      --line: rgba(97, 54, 82, .12);
+      --shadow: 0 28px 80px rgba(77, 33, 65, .13);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Aptos", "Segoe UI", system-ui, -apple-system, sans-serif;
     }
-    :root[data-theme="blue"] { --rose: #658eb8; --deep-rose: #496f99; --paper: #fbfdff; --blush: #dfebf6; --line: #d8e5f0; --page-bg: #e8f0f7; --glow-b: rgba(156,190,223,.34); }
-    :root[data-theme="lilac"] { --rose: #9576bd; --deep-rose: #76579e; --paper: #fdfaff; --blush: #ece2f7; --line: #e4d9f0; --page-bg: #f0eaf6; --glow-b: rgba(192,164,224,.34); }
-    :root[data-theme="green"] { --rose: #72977a; --deep-rose: #547a5d; --paper: #fbfff9; --blush: #e0eee1; --line: #d8e6d8; --page-bg: #e9f0e6; --glow-b: rgba(164,197,164,.34); }
+
     * { box-sizing: border-box; }
-    [hidden] { display: none !important; }
+    html { min-width: 320px; background: var(--cream); }
     body {
       min-width: 320px;
       min-height: 100vh;
@@ -35,467 +33,668 @@
       color: var(--ink);
       font-family: var(--sans);
       background:
-        radial-gradient(ellipse at 15% 12%, var(--glow-a), transparent 34%),
-        radial-gradient(ellipse at 91% 82%, var(--glow-b), transparent 35%),
-        var(--page-bg);
+        radial-gradient(ellipse at 8% 12%, rgba(255, 207, 209, .7), transparent 31rem),
+        radial-gradient(ellipse at 94% 80%, rgba(255, 217, 186, .48), transparent 28rem),
+        linear-gradient(135deg, #fff9f4, #fff2f4 48%, #fff9f2);
       overflow-x: hidden;
     }
-    button { font: inherit; }
-    .page-shell {
-      position: relative;
-      display: grid;
-      min-height: 100vh;
-      place-items: center;
-      padding: 38px 22px;
-      isolation: isolate;
+    button, input, textarea, select { font: inherit; }
+    button { color: inherit; }
+    button:disabled { cursor: not-allowed; opacity: .46; transform: none !important; box-shadow: none !important; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(243, 107, 124, .5);
+      outline-offset: 3px;
     }
-    .color-screen {
-      position: relative;
-      width: min(100%, 620px);
-      padding: 43px 42px 38px;
-      border: 1px solid rgba(255,255,255,.86);
-      border-radius: 32px;
-      background: var(--paper);
-      box-shadow: 0 28px 75px rgba(117, 68, 77, .14), 0 3px 9px rgba(117, 68, 77, .05);
-      text-align: center;
-      animation: appear .65s ease both;
-    }
-    .color-screen .topline { justify-content: center; }
-    .color-intro { margin: 26px 0 8px; color: #ae8588; font-family: var(--serif); font-size: 17px; font-style: italic; }
-    .color-screen h1 { max-width: none; margin: 0 0 12px; font-size: clamp(40px, 7vw, 57px); }
-    .color-help { max-width: 380px; margin: 0 auto 24px; color: #806b6d; font-size: 14px; line-height: 1.6; }
-    .color-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 11px; }
-    .color-option {
-      display: flex;
-      min-height: 110px;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 8px;
-      padding: 12px 8px;
-      border: 1px solid #f0e2df;
-      border-radius: 18px;
-      color: #64474a;
-      background: #fffaf7;
-      cursor: pointer;
-      font-family: var(--serif);
-      font-size: 15px;
-      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
-    }
-    .color-option:hover { transform: translateY(-4px); border-color: #e6c4c8; box-shadow: 0 8px 18px rgba(117,68,77,.1); }
-    .color-option:focus-visible { outline: 3px solid var(--deep-rose); outline-offset: 3px; }
-    .color-swatch { display: grid; width: 43px; height: 43px; place-items: center; border: 3px solid rgba(255,255,255,.86); border-radius: 50%; box-shadow: 0 2px 9px rgba(72,51,54,.13); color: rgba(255,255,255,.94); font-size: 18px; }
-    .swatch-rose { background: linear-gradient(145deg, #efb6bd, #d66c7d); }
-    .swatch-blue { background: linear-gradient(145deg, #b8d2eb, #668eb8); }
-    .swatch-lilac { background: linear-gradient(145deg, #d8c4eb, #9576bd); }
-    .swatch-green { background: linear-gradient(145deg, #c7ddc5, #72977a); }
-    .color-screen .color-prompt { min-height: 21px; margin: 16px 0 0; color: #b16d78; font-family: var(--serif); font-size: 14px; font-style: italic; }
-    .ambient-hearts, .heart-burst {
+    .page-noise {
       position: fixed;
       inset: 0;
-      overflow: hidden;
       pointer-events: none;
       z-index: -1;
+      opacity: .16;
+      background-image: radial-gradient(rgba(109, 63, 85, .22) .55px, transparent .55px);
+      background-size: 6px 6px;
+      mask-image: linear-gradient(to bottom, #000, transparent 88%);
     }
-    .ambient-heart {
-      position: absolute;
-      color: rgba(206, 111, 128, .28);
-      animation: drift var(--duration, 8s) ease-in-out infinite;
-      animation-delay: var(--delay, 0s);
-      user-select: none;
-    }
-    .invitation-card {
-      position: relative;
-      width: min(100%, 990px);
-      min-height: 570px;
-      padding: 48px 58px 43px;
-      border: 1px solid rgba(255,255,255,.82);
-      border-radius: 34px;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(244,212,214,.20) 0 2px, transparent 2.4px),
-        var(--paper);
-      background-size: 22px 22px, auto;
-      box-shadow: 0 28px 75px rgba(117, 68, 77, .14), 0 3px 9px rgba(117, 68, 77, .05);
-      overflow: hidden;
-    }
-    .invitation-card.is-open { animation: card-open .78s cubic-bezier(.18,.8,.22,1) both; }
-    .invitation-card::before, .invitation-card::after {
-      content: "♡";
-      position: absolute;
-      color: #eeb9c0;
-      font-family: var(--serif);
-      font-size: 33px;
-      line-height: 1;
-      pointer-events: none;
-    }
-    .invitation-card::before { top: 25px; right: 34px; transform: rotate(15deg); }
-    .invitation-card::after { bottom: 22px; left: 31px; font-size: 23px; transform: rotate(-16deg); }
-    .topline {
+    .page-wrap { width: min(1160px, calc(100% - 48px)); margin: 0 auto; }
+    .topbar {
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: var(--deep-rose);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
+      justify-content: space-between;
+      min-height: 94px;
+      gap: 20px;
     }
-    .topline-mark { font-size: 17px; letter-spacing: 0; }
-    .chosen-color { display: inline-flex; align-items: center; gap: 6px; margin: 19px 0 -12px 8px; padding: 6px 11px; border: 1px solid var(--line); border-radius: 99px; color: var(--deep-rose); background: var(--blush); font-family: var(--serif); font-size: 12px; font-style: italic; }
-    .intro-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.12fr) minmax(280px, .88fr);
+    .brand {
+      display: inline-flex;
       align-items: center;
-      gap: 42px;
-      margin-top: 29px;
-    }
-    .copy { padding: 7px 0 0 8px; }
-    .eyebrow {
-      margin: 0 0 13px;
-      color: #ae8588;
-      font-family: var(--serif);
-      font-size: 17px;
-      font-style: italic;
-    }
-    h1, h2, p { margin-top: 0; }
-    h1 {
-      max-width: 560px;
-      margin-bottom: 18px;
-      color: #53383d;
-      font-family: var(--serif);
-      font-size: clamp(41px, 5.2vw, 60px);
-      font-weight: 500;
-      letter-spacing: -.045em;
-      line-height: .99;
-    }
-    h1 em { color: var(--rose); font-weight: 500; }
-    .intro-text {
-      max-width: 390px;
-      margin-bottom: 25px;
-      color: #806b6d;
-      font-size: 15px;
-      line-height: 1.7;
-    }
-    .question-label {
-      margin: 0 0 7px;
-      color: #b38f91;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-    }
-    .question {
-      margin: 0 0 14px;
-      font-family: var(--serif);
-      font-size: 22px;
-      font-weight: 500;
-    }
-    .button-stage {
-      position: relative;
-      width: min(100%, 360px);
-      height: 70px;
-      margin: 0 0 0 -8px;
-      touch-action: manipulation;
-    }
-    .choice {
-      position: absolute;
-      top: 4px;
-      min-height: 48px;
-      padding: 0 23px;
-      border: 0;
-      border-radius: 99px;
-      cursor: pointer;
+      gap: 12px;
+      color: var(--ink);
+      text-decoration: none;
       font-size: 14px;
       font-weight: 700;
-      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
-      -webkit-tap-highlight-color: transparent;
+      letter-spacing: -.02em;
     }
-    .choice:focus-visible, .back-button:focus-visible, .cat-touch:focus-visible {
-      outline: 3px solid #a7475b;
-      outline-offset: 4px;
-    }
-    .choice-yes {
-      left: 8px;
-      color: #fff;
-      background: linear-gradient(135deg, #dc8290, #cf6579);
-      box-shadow: 0 9px 19px rgba(202, 97, 119, .24);
-    }
-    .choice-yes:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 23px rgba(202, 97, 119, .31); }
-    .choice-no {
-      left: 190px;
-      color: #9c777c;
-      background: #f5e8e7;
-      box-shadow: 0 5px 13px rgba(117, 68, 77, .10);
-      transition: left .34s cubic-bezier(.18,.82,.22,1), top .34s cubic-bezier(.18,.82,.22,1), transform .28s ease, box-shadow .2s ease;
-      will-change: left, top, transform;
-    }
-    .choice-no.is-running { position: fixed; z-index: 20; margin: 0; }
-    .choice-no:hover { background: #f2dedf; }
-    .reaction {
-      min-height: 20px;
-      margin: -2px 0 0;
-      color: #b16d78;
-      font-family: var(--serif);
-      font-size: 14px;
-      font-style: italic;
-    }
-    .pet-panel {
-      position: relative;
-      display: flex;
-      min-height: 340px;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      padding: 21px 16px 17px;
-      border: 1px solid #f2e4df;
-      border-radius: 27px;
-      background: linear-gradient(150deg, #fbf0e9, #f8e8e3 76%, #f6e6e2);
-    }
-    .pet-panel::before, .pet-panel::after {
-      position: absolute;
-      color: #d68a95;
-      font-family: var(--serif);
-      font-size: 23px;
-      opacity: .64;
-    }
-    .pet-panel::before { content: "✦"; top: 22px; left: 24px; }
-    .pet-panel::after { content: "♡"; top: 37px; right: 26px; transform: rotate(18deg); }
-    .pet-ribbon {
-      position: absolute;
-      top: -11px;
-      right: 31px;
-      padding: 6px 13px 7px;
-      border-radius: 99px;
-      color: #9d5d68;
-      background: #f2d0d3;
-      font-family: var(--serif);
-      font-size: 13px;
-      font-style: italic;
-      transform: rotate(4deg);
-    }
-    .cat-touch {
+    .brand-mark {
       display: grid;
-      width: 100%;
-      min-height: 235px;
+      width: 39px;
+      height: 39px;
       place-items: center;
-      padding: 9px 8px 0;
-      border: 0;
-      border-radius: 21px;
-      background: transparent;
-      cursor: pointer;
-      touch-action: manipulation;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 14px;
+      background: linear-gradient(145deg, #fff, #ffe1e4);
+      box-shadow: 0 8px 22px rgba(179, 89, 120, .14);
+      color: var(--berry);
+      font-size: 19px;
     }
-    .cat-touch svg {
-      width: min(100%, 328px);
-      height: auto;
-      overflow: visible;
-      filter: drop-shadow(0 7px 4px rgba(143, 93, 85, .08));
-      transition: transform .28s ease;
-    }
-    .cat-touch:hover svg { transform: translateY(-3px) rotate(-1deg); }
-    .cat-touch:active svg { transform: scale(.98); }
-    .cat-tail { transform-origin: 95px 161px; transition: transform .35s ease; }
-    .cat-touch:hover .cat-tail, .cat-touch.is-purring .cat-tail { animation: tail-wag .58s ease-in-out 2; }
-    .cat-touch.is-purring svg { animation: cat-purr .23s ease-in-out 4 alternate; }
-    .pet-instruction {
-      margin: 1px 0 3px;
-      color: #9a7778;
-      font-family: var(--serif);
-      font-size: 15px;
-      font-style: italic;
-    }
-    .purr-count {
-      margin: 0;
-      color: #b69a98;
-      font-size: 10px;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-    }
-    .footer-note {
-      display: flex;
-      justify-content: center;
+    .topnote {
+      display: inline-flex;
+      align-items: center;
       gap: 8px;
-      margin-top: 27px;
-      color: #b49697;
-      font-family: var(--serif);
-      font-size: 14px;
-      font-style: italic;
+      color: #857586;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
     }
-    .footer-note span { color: var(--rose); font-style: normal; }
-
-    .success-view {
-      display: none;
-      min-height: 472px;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      padding: 24px 4px 8px;
-      text-align: center;
-      animation: appear .72s cubic-bezier(.2,.8,.2,1) both;
-    }
-    .success-view.is-visible { display: flex; }
-    .success-stamp {
+    .topnote::before { content: ""; width: 22px; height: 1px; background: #d4afbd; }
+    .topnote::after { content: ""; width: 22px; height: 1px; background: #d4afbd; }
+    .main-area { padding: 10px 0 76px; }
+    .hero-card {
+      position: relative;
       display: grid;
-      width: 62px;
-      height: 62px;
-      place-items: center;
-      margin-bottom: 14px;
-      border: 1px solid #f1d3d7;
-      border-radius: 50%;
-      color: #c66375;
-      background: #fff1f0;
-      font-size: 28px;
-      animation: stamp-in .7s .2s cubic-bezier(.18,1.4,.4,1) both;
+      grid-template-columns: 1fr .92fr;
+      min-height: 620px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 34px;
+      background: rgba(255, 253, 251, .76);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
     }
-    .success-kicker {
-      margin: 0 0 9px;
-      color: #b17d83;
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      align-self: center;
+      padding: clamp(38px, 6.8vw, 86px);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--berry);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: .18em;
       text-transform: uppercase;
     }
-    h2 {
-      margin-bottom: 10px;
-      color: #573a40;
+    .eyebrow .sparkle { font-size: 15px; }
+    h1, h2, p { margin-top: 0; }
+    .hero-copy h1 {
+      max-width: 580px;
+      margin: 24px 0 18px;
       font-family: var(--serif);
-      font-size: clamp(43px, 6vw, 65px);
+      font-size: clamp(52px, 7vw, 89px);
       font-weight: 500;
-      letter-spacing: -.045em;
-      line-height: 1.02;
+      letter-spacing: -.07em;
+      line-height: .98;
     }
-    h2 em { color: var(--rose); font-weight: 500; }
-    .success-copy {
-      max-width: 480px;
-      margin-bottom: 25px;
-      color: #806b6d;
-      font-family: var(--serif);
-      font-size: 17px;
-      line-height: 1.65;
+    .hero-copy h1 em { color: var(--berry); font-weight: 500; }
+    .hero-intro {
+      max-width: 440px;
+      margin-bottom: 30px;
+      color: #796e7e;
+      font-size: 16px;
+      line-height: 1.75;
     }
-    .date-details {
-      display: grid;
-      width: min(100%, 630px);
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin: 0 auto 22px;
-      text-align: left;
-    }
-    .detail-card {
-      min-height: 118px;
-      padding: 18px 19px 15px;
-      border: 1px solid #f1e0dc;
-      border-radius: 18px;
-      background: #fff7f2;
-    }
-    .detail-label {
-      display: flex;
+    .button-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .btn {
+      position: relative;
+      display: inline-flex;
+      min-height: 52px;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-      color: #b0757e;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .15em;
-      text-transform: uppercase;
+      justify-content: center;
+      gap: 10px;
+      border: 0;
+      border-radius: 17px;
+      padding: 0 22px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 750;
+      text-decoration: none;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
     }
-    .detail-value {
-      margin: 0;
-      color: #64474a;
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0) scale(.985); }
+    .btn:disabled { cursor: not-allowed; opacity: .48; transform: none; box-shadow: none; }
+    .btn-primary {
+      color: white;
+      background: linear-gradient(120deg, #bd4f78, #f0747e 72%, #f68e77);
+      box-shadow: 0 13px 27px rgba(195, 77, 113, .25), inset 0 1px 0 rgba(255,255,255,.25);
+    }
+    .btn-primary:hover { box-shadow: 0 17px 34px rgba(195, 77, 113, .34); }
+    .btn-quiet {
+      color: #766879;
+      background: rgba(255,255,255,.66);
+      border: 1px solid var(--line);
+    }
+    .btn-quiet:hover { background: #fff; }
+    .small-note { display: flex; align-items: center; gap: 8px; margin-top: 24px; color: #9a8c98; font-size: 12px; }
+    .small-note span { color: var(--coral); }
+    .hero-art {
+      position: relative;
+      display: grid;
+      min-height: 530px;
+      place-items: center;
+      padding: 42px;
+      isolation: isolate;
+    }
+    .hero-art::before {
+      position: absolute;
+      z-index: -2;
+      top: 9%;
+      right: 4%;
+      width: 83%;
+      height: 78%;
+      border-radius: 48% 52% 46% 54% / 45% 46% 54% 55%;
+      background: linear-gradient(145deg, #f9cbd2 2%, #ffe4d3 56%, #f6d8e2);
+      content: "";
+      transform: rotate(-8deg);
+    }
+    .sun-disc {
+      position: absolute;
+      top: 12%;
+      left: 8%;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #fff0c9;
+      filter: blur(.15px);
+      opacity: .8;
+      z-index: -1;
+    }
+    .orbital {
+      position: absolute;
+      top: 16%;
+      right: 7%;
+      width: 105px;
+      height: 105px;
+      border: 1px solid rgba(126, 69, 103, .16);
+      border-radius: 50%;
+      animation: orbit 18s linear infinite;
+    }
+    .orbital::before { position: absolute; top: 6px; left: 15px; width: 9px; height: 9px; border-radius: 50%; background: white; content: ""; box-shadow: 0 0 12px #fff; }
+    .ticket-art {
+      position: relative;
+      display: flex;
+      width: min(100%, 392px);
+      min-height: 418px;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.48);
+      border-radius: 27px;
+      padding: 25px;
+      color: white;
+      background:
+        radial-gradient(circle at 80% 18%, rgba(255, 172, 158, .4), transparent 27%),
+        radial-gradient(circle at 18% 90%, rgba(241, 111, 144, .28), transparent 30%),
+        linear-gradient(151deg, #311a3a, #512544 56%, #78304c);
+      box-shadow: 0 26px 55px rgba(79, 37, 68, .27), inset 0 1px 0 rgba(255,255,255,.18);
+      transform: rotate(3deg);
+      animation: cardFloat 5.5s ease-in-out infinite;
+    }
+    .ticket-art::after {
+      position: absolute;
+      right: -24px;
+      bottom: 76px;
+      left: -24px;
+      height: 1px;
+      background-image: linear-gradient(to right, rgba(255,255,255,.34) 50%, transparent 0%);
+      background-size: 8px 1px;
+      content: "";
+    }
+    .ticket-top, .ticket-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .ticket-kicker { color: #f2c4cd; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+    .ticket-heart { display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid rgba(255,255,255,.24); border-radius: 50%; color: #ffd2d8; }
+    .ticket-title { margin: 7px 0 0; font-family: var(--serif); font-size: clamp(34px, 4.4vw, 49px); font-weight: 500; letter-spacing: -.04em; line-height: .98; }
+    .ticket-subtitle { margin: 12px 0 0; color: #ead3df; font-size: 13px; line-height: 1.55; }
+    .ticket-illustration { position: relative; display: grid; min-height: 164px; place-items: center; margin: 11px -4px 8px; }
+    .moon { position: absolute; width: 154px; height: 154px; border: 1px solid rgba(255,255,255,.3); border-radius: 50%; box-shadow: 0 0 50px rgba(255, 205, 193, .1), inset 0 0 26px rgba(255, 207, 221, .06); }
+    .moon::before { position: absolute; top: 11px; right: 10px; width: 16px; height: 16px; border-radius: 50%; background: #ffd9af; box-shadow: 0 0 24px #ffd9af; content: ""; }
+    .ticket-cat { position: relative; z-index: 1; font-size: 120px; line-height: 1; filter: drop-shadow(0 15px 15px rgba(13, 7, 20, .28)); animation: catBob 3.2s ease-in-out infinite; }
+    .ticket-paw { position: absolute; right: 27px; bottom: 17px; font-size: 24px; opacity: .8; transform: rotate(18deg); }
+    .ticket-bottom { align-items: end; padding-top: 24px; }
+    .ticket-meta { display: grid; gap: 5px; color: #d5b8c9; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .ticket-meta strong { color: white; font-size: 13px; letter-spacing: 0; text-transform: none; }
+    .ticket-stamp { color: #ffe0cc; font-family: var(--serif); font-size: 27px; transform: rotate(-8deg); }
+    .floating-heart { position: absolute; color: rgba(178, 82, 123, .5); font-size: 20px; animation: drift 5s ease-in-out infinite; }
+    .heart-one { top: 19%; left: 13%; }
+    .heart-two { right: 5%; bottom: 23%; font-size: 27px; animation-delay: -2.2s; }
+    .heart-three { left: 5%; bottom: 17%; font-size: 16px; animation-delay: -3.4s; }
+    .hero-caption { position: absolute; right: 0; bottom: 9%; left: 0; color: #926c84; font-family: var(--serif); font-size: 18px; font-style: italic; text-align: center; }
+
+    .door-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      min-height: 620px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.86);
+      border-radius: 34px;
+      background: rgba(255,253,251,.78);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      transition: grid-template-columns .75s cubic-bezier(.2,.8,.2,1);
+    }
+    .door-card.opened { grid-template-columns: minmax(0, 0fr) minmax(0, 1fr); }
+    .door-copy {
+      position: relative;
+      z-index: 4;
+      align-self: center;
+      padding: clamp(38px, 6.5vw, 78px);
+      transition: opacity .35s ease, transform .45s ease, padding .5s ease;
+    }
+    .door-copy h1 {
+      margin: 24px 0 18px;
       font-family: var(--serif);
-      font-size: 19px;
-      font-weight: 600;
+      font-size: clamp(49px, 6.2vw, 76px);
+      font-weight: 500;
+      letter-spacing: -.07em;
+      line-height: .98;
     }
-    .detail-caption { margin: 5px 0 0; color: #a18a89; font-size: 12px; }
-    .waiting-note {
-      margin: 0 0 21px;
-      color: #a17178;
-      font-family: var(--serif);
-      font-size: 20px;
-      font-style: italic;
+    .door-copy h1 em { color: var(--berry); font-weight: 500; }
+    .door-copy p { max-width: 390px; margin: 0 0 28px; color: #796e7e; font-size: 15px; line-height: 1.75; }
+    .door-card.opened .door-copy { width: 0; min-width: 0; overflow: hidden; padding: 0; opacity: 0; transform: translateX(-20px); pointer-events: none; }
+    .door-stage {
+      position: relative;
+      display: grid;
+      min-width: 0;
+      min-height: 580px;
+      place-items: center;
+      padding: 34px 42px;
+      perspective: 1500px;
+      isolation: isolate;
     }
-    .back-button {
-      padding: 9px 15px;
-      border: 1px solid #eed7da;
-      border-radius: 99px;
-      color: #9e7076;
+    .door-halo {
+      position: absolute;
+      z-index: -1;
+      inset: 7% 3% 5%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(255,220,208,.9), rgba(255,221,228,.58) 48%, transparent 73%);
+      filter: blur(3px);
+      transition: transform 1s ease, opacity .8s ease;
+    }
+    .door-frame {
+      position: relative;
+      width: min(100%, 440px);
+      height: 500px;
+      border: 10px solid rgba(255,255,255,.83);
+      border-bottom: 0;
+      border-radius: 225px 225px 13px 13px;
+      background: linear-gradient(160deg, #fbd9da, #fff0d7 52%, #f8cbd7);
+      box-shadow: 0 26px 55px rgba(106,48,82,.2), inset 0 0 0 1px rgba(159,88,119,.15);
+      transform-style: preserve-3d;
+    }
+    .door-frame::before {
+      position: absolute;
+      z-index: 0;
+      inset: 10px;
+      border: 1px solid rgba(255,255,255,.77);
+      border-radius: 205px 205px 4px 4px;
+      content: "";
+      pointer-events: none;
+    }
+    .door-reveal {
+      position: absolute;
+      z-index: 1;
+      inset: 14px 14px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 195px 195px 5px 5px;
+      padding: 34px clamp(16px, 4vw, 30px) 29px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 51% 26%, rgba(255,255,255,.92), transparent 36%),
+        linear-gradient(160deg, rgba(255,247,233,.94), rgba(255,224,226,.95) 60%, rgba(253,199,211,.96));
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(16px) scale(.97);
+      transition: opacity .52s ease .34s, transform .68s cubic-bezier(.2,.8,.2,1) .31s, visibility 0s linear .31s;
+    }
+    .door-card.opened .door-reveal { opacity: 1; visibility: visible; transform: none; transition-delay: .34s, .31s, .31s; }
+    .door-reveal .inside-pet { margin-bottom: 4px; font-size: 42px; line-height: 1; filter: drop-shadow(0 6px 7px rgba(100,49,77,.13)); animation: catBob 3s ease-in-out infinite; }
+    .door-reveal .inside-label { margin: 12px 0 9px; color: #a05275; font-size: 9px; font-weight: 850; letter-spacing: .19em; text-transform: uppercase; }
+    .door-reveal h2 { margin: 0; font-family: var(--serif); font-size: clamp(28px, 3.7vw, 39px); font-weight: 500; letter-spacing: -.055em; line-height: 1.02; }
+    .door-reveal h2 em { color: var(--berry); font-weight: 500; }
+    .door-reveal p { max-width: 280px; margin: 12px 0 18px; color: #817383; font-size: 11px; line-height: 1.55; }
+    .door-actions { width: 100%; flex-direction: column; gap: 9px; }
+    .door-actions .btn { width: 100%; min-height: 44px; border-radius: 14px; padding: 0 12px; font-size: 11px; }
+    .door-leaf {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border: 0;
+      border-radius: 215px 215px 5px 5px;
+      padding: 0;
+      color: #ffe3b9;
+      background:
+        radial-gradient(ellipse at 36% 20%, rgba(255,255,255,.12), transparent 44%),
+        linear-gradient(115deg, #8e3d64, #713253 58%, #5d2d50);
+      box-shadow: inset 9px 0 18px rgba(47,21,43,.18), inset -10px 0 20px rgba(42,19,39,.12), 12px 12px 23px rgba(68,31,62,.22);
+      cursor: pointer;
+      transform: rotateY(0deg);
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      transition: transform .95s cubic-bezier(.15,.76,.28,1), box-shadow .7s ease;
+      backface-visibility: visible;
+    }
+    .door-leaf::before {
+      position: absolute;
+      inset: 15px;
+      border: 1px solid rgba(255,232,203,.32);
+      border-radius: 200px 200px 4px 4px;
+      content: "";
+      pointer-events: none;
+    }
+    .door-leaf:hover { filter: brightness(1.07); }
+    .door-card.opened .door-leaf { box-shadow: inset 9px 0 18px rgba(47,21,43,.18), -18px 15px 22px rgba(68,31,62,.14); transform: rotateY(-91deg); pointer-events: none; }
+    .door-panel {
+      position: absolute;
+      right: 17%;
+      left: 17%;
+      border: 1px solid rgba(255,229,202,.28);
+      box-shadow: inset 0 0 0 5px rgba(255,255,255,.035);
+      pointer-events: none;
+    }
+    .door-panel.upper { top: 12%; height: 29%; border-radius: 140px 140px 8px 8px; }
+    .door-panel.lower { top: 46%; bottom: 7%; border-radius: 8px; }
+    .door-knob {
+      position: absolute;
+      top: 51%;
+      right: 11%;
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border: 2px solid #f8cf94;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff0c9, #d79752);
+      box-shadow: 0 0 0 4px rgba(255,221,172,.08), 0 2px 8px rgba(30,12,27,.32);
+      pointer-events: none;
+    }
+    .door-heart { position: absolute; top: 22%; left: 0; right: 0; color: rgba(255,231,206,.8); font-family: var(--serif); font-size: 38px; pointer-events: none; }
+    .door-open-hint { position: absolute; right: 0; bottom: 5%; left: 0; color: rgba(255,235,215,.8); font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; pointer-events: none; }
+    .door-card.opened .door-frame { box-shadow: 0 32px 72px rgba(124,55,94,.2), 0 0 60px rgba(255,226,192,.46); }
+    .door-card.opened .door-halo { opacity: 1; transform: scale(1.13); }
+    .door-floor-note { position: absolute; bottom: 0; left: 50%; color: #a88198; font-family: var(--serif); font-size: 13px; font-style: italic; white-space: nowrap; transform: translate(-50%, 22px); transition: opacity .25s ease; }
+    .door-card.opened .door-floor-note { opacity: 0; }
+
+    .flow-card {
+      width: min(100%, 900px);
+      margin: 0 auto;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 34px;
+      background: rgba(255,253,251,.83);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .flow-head { padding: 38px clamp(25px, 6vw, 66px) 24px; border-bottom: 1px solid rgba(116,67,93,.09); }
+    .flow-topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+    .back-button { display: inline-flex; align-items: center; gap: 8px; border: 0; padding: 7px 0; color: #837282; background: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+    .back-button:hover { color: var(--berry); }
+    .step-label { color: #a08d9d; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .progress { display: flex; align-items: center; gap: 7px; }
+    .progress-dot { width: 8px; height: 8px; border-radius: 9px; background: #eddde2; transition: all .3s ease; }
+    .progress-dot.active { width: 29px; background: linear-gradient(90deg, #bf557a, #f28a83); }
+    .flow-head h1 { margin: 0 0 10px; font-family: var(--serif); font-size: clamp(35px, 5vw, 55px); font-weight: 500; letter-spacing: -.055em; line-height: 1.05; }
+    .flow-head p { max-width: 610px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .flow-body { padding: 32px clamp(25px, 6vw, 66px) 48px; }
+    .section-label { margin: 0 0 14px; color: #a08c9b; font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .date-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .date-choice {
+      position: relative;
+      display: flex;
+      min-height: 190px;
+      flex-direction: column;
+      align-items: flex-start;
+      border: 1px solid rgba(105, 57, 86, .12);
+      border-radius: 23px;
+      padding: 21px 22px;
+      overflow: hidden;
+      background: rgba(255,255,255,.78);
+      cursor: pointer;
+      text-align: left;
+      transition: transform .23s ease, border-color .23s ease, box-shadow .23s ease, background .23s ease;
+    }
+    .date-choice::after { position: absolute; top: 19px; right: 19px; width: 18px; height: 18px; border: 1px solid rgba(118,67,92,.22); border-radius: 50%; content: ""; transition: all .2s ease; }
+    .date-choice:hover { transform: translateY(-3px); border-color: rgba(196, 83, 123, .42); box-shadow: 0 12px 28px rgba(91,47,78,.1); }
+    .date-choice.selected { border-color: var(--berry); background: linear-gradient(135deg, #fff8f5, #fff1f2); box-shadow: 0 12px 28px rgba(165,60,104,.12); }
+    .date-choice.selected::after { border: 5px solid white; background: var(--berry); box-shadow: 0 0 0 1px var(--berry); }
+    .date-choice-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 15px; margin-bottom: 16px; background: linear-gradient(145deg, #ffe3e3, #fff1d7); font-size: 21px; }
+    .date-choice-title { display: block; max-width: calc(100% - 18px); font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -.035em; line-height: 1.12; }
+    .date-choice-date { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 13px; color: #805469; font-size: 12px; font-weight: 750; }
+    .flow-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 26px; }
+    .flow-actions .hint { max-width: 320px; color: #a08f9f; font-size: 11px; line-height: 1.5; }
+    .field-error { display: none; margin: 10px 0 0; color: #b23e61; font-size: 12px; }
+    .field-error.show { display: block; }
+
+    .no-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      min-height: 470px;
+      overflow: hidden;
+      border-radius: 34px;
+      background: linear-gradient(120deg, #fffdfa, #fff1f0);
+      box-shadow: var(--shadow);
+    }
+    .no-art { position: relative; display: grid; min-height: 360px; place-items: center; background: radial-gradient(circle at 52% 45%, #ffe5d1, #f8d4dc 58%, #f3d5e2); }
+    .no-art::before { position: absolute; width: 250px; height: 250px; border: 1px solid rgba(111,56,87,.13); border-radius: 50%; content: ""; animation: orbit 22s linear infinite; }
+    .no-mascot { z-index: 1; font-size: clamp(115px, 18vw, 175px); line-height: 1; filter: drop-shadow(0 22px 20px rgba(91,46,77,.15)); animation: petHop 2.5s ease-in-out infinite; }
+    .no-sidekick { position: absolute; right: 13%; bottom: 13%; font-size: 50px; animation: sidekick 3s ease-in-out infinite; }
+    .no-copy { align-self: center; padding: clamp(30px, 5vw, 60px); }
+    .no-count { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 17px; color: #a15a7c; font-size: 10px; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+    .no-count::before { width: 22px; height: 1px; background: #d9a8bb; content: ""; }
+    .no-copy h1 { margin: 0 0 12px; font-family: var(--serif); font-size: clamp(34px, 5vw, 52px); font-weight: 500; letter-spacing: -.05em; line-height: 1.04; }
+    .no-copy p { max-width: 380px; margin: 0 0 24px; color: #827383; font-size: 14px; line-height: 1.7; }
+    .no-exit { display: inline-block; margin-top: 16px; border: 0; padding: 8px 0; color: #927f90; background: none; cursor: pointer; font-size: 11px; text-decoration: underline; text-decoration-color: #cbb8c8; text-underline-offset: 4px; }
+    .no-exit:hover { color: var(--berry); }
+    .no-end { width: min(100%, 690px); margin: 35px auto; border: 1px solid rgba(255,255,255,.9); border-radius: 32px; padding: 52px 32px; background: rgba(255,253,251,.84); box-shadow: var(--shadow); text-align: center; }
+    .no-end .end-pet { font-size: 70px; animation: sadNod 2.5s ease-in-out infinite; }
+    .no-end h1 { margin: 16px 0 10px; font-family: var(--serif); font-size: 42px; font-weight: 500; letter-spacing: -.04em; }
+    .no-end p { max-width: 400px; margin: 0 auto 24px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+    .gift-wrap { position: relative; width: min(100%, 900px); min-height: 580px; margin: 0 auto; display: grid; place-items: center; overflow: hidden; border-radius: 34px; background: linear-gradient(135deg, #fff8f1, #ffeaf0 55%, #fff1df); box-shadow: var(--shadow); }
+    .gift-glow { position: absolute; top: 8%; left: 50%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.84), rgba(255,255,255,0) 68%); transform: translateX(-50%); }
+    .gift-copy { position: absolute; z-index: 1; top: 43px; left: 24px; right: 24px; text-align: center; }
+    .gift-copy .eyebrow { justify-content: center; }
+    .gift-copy h1 { margin: 12px 0 7px; font-family: var(--serif); font-size: clamp(34px, 5vw, 48px); font-weight: 500; letter-spacing: -.05em; }
+    .gift-copy p { margin: 0; color: #8d7c8d; font-size: 13px; }
+    .gift-button-wrap { position: relative; z-index: 2; display: grid; justify-items: center; gap: 19px; padding-top: 90px; }
+    .gift-box {
+      position: relative;
+      width: 178px;
+      height: 148px;
+      border: 0;
+      padding: 0;
       background: transparent;
       cursor: pointer;
-      font-size: 12px;
-      transition: background .2s ease;
+      filter: drop-shadow(0 22px 25px rgba(149,61,96,.23));
+      transition: transform .25s ease;
     }
-    .back-button:hover { background: #fbefed; }
-    .heart-particle {
+    .gift-box:hover { transform: translateY(-6px) rotate(-2deg); }
+    .gift-base { position: absolute; right: 8px; bottom: 0; left: 8px; height: 103px; overflow: hidden; border-radius: 7px 7px 18px 18px; background: linear-gradient(115deg, #d65d7b, #ed8290 63%, #f2a180); }
+    .gift-base::before { position: absolute; top: 0; bottom: 0; left: 72px; width: 29px; background: linear-gradient(90deg, #ffe0a3, #fff0c6 50%, #ffd990); content: ""; }
+    .gift-lid { position: absolute; z-index: 2; top: 24px; right: 0; left: 0; height: 34px; border-radius: 9px; background: linear-gradient(110deg, #e56d87, #f69497); }
+    .gift-lid::before { position: absolute; inset: 0 auto 0 74px; width: 29px; background: linear-gradient(90deg, #ffdf9a, #fff0c4 52%, #ffd88a); content: ""; }
+    .gift-ribbon { position: absolute; z-index: 3; top: 0; left: 72px; width: 36px; height: 34px; }
+    .gift-ribbon::before, .gift-ribbon::after { position: absolute; top: 1px; width: 26px; height: 22px; border: 7px solid #ffe9b1; border-radius: 22px 22px 3px 22px; content: ""; }
+    .gift-ribbon::before { left: -10px; transform: rotate(29deg); }
+    .gift-ribbon::after { left: 19px; transform: scaleX(-1) rotate(29deg); }
+    .gift-pawmark { position: absolute; z-index: 4; right: 18px; bottom: 14px; color: rgba(255,255,255,.56); font-size: 22px; transform: rotate(20deg); }
+    .gift-tap { color: #896d84; font-size: 12px; font-weight: 700; letter-spacing: .06em; }
+    .gift-tap span { display: inline-block; margin-left: 5px; color: var(--berry); animation: nudge 1.4s ease-in-out infinite; }
+    .balloon-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .balloon {
       position: absolute;
-      bottom: -40px;
-      left: var(--x, 50%);
-      color: var(--color, #da7586);
-      font-size: var(--size, 20px);
-      line-height: 1;
+      bottom: -90px;
+      z-index: 3;
+      font-size: 42px;
+      animation: balloonRise var(--duration, 6s) cubic-bezier(.22,.62,.32,1) forwards;
+      animation-delay: var(--delay, 0s);
+      filter: drop-shadow(0 9px 10px rgba(123,61,92,.12));
+    }
+    .balloon::after { position: absolute; top: 35px; left: 50%; width: 1px; height: 48px; background: rgba(141,91,117,.32); content: ""; }
+    .invite-card {
+      position: absolute;
+      z-index: 4;
+      top: 50%;
+      left: 50%;
+      width: min(440px, calc(100% - 36px));
+      border: 1px solid rgba(255,255,255,.92);
+      border-radius: 28px;
+      padding: 25px;
+      background: rgba(255,253,251,.96);
+      box-shadow: 0 25px 65px rgba(87,39,72,.2);
       opacity: 0;
-      animation: heart-rise var(--life, 3.4s) ease-out forwards;
-      filter: drop-shadow(0 2px 2px rgba(148,71,84,.13));
-    }
-    .heart-particle.heart-rain { top: -35px; bottom: auto; animation-name: heart-fall; animation-timing-function: linear; }
-    .heart-burst { z-index: 4; }
-    .heart-burst .heart-particle { bottom: -30px; }
-    .pet-heart {
-      position: absolute;
-      color: #d66e80;
-      font-size: 20px;
       pointer-events: none;
-      animation: pet-heart .9s ease-out forwards;
+      transform: translate(-50%, -36%) scale(.8) rotate(-4deg);
+      transition: opacity .55s ease, transform .7s cubic-bezier(.2,.8,.2,1);
     }
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+    .gift-wrap.open .invite-card { opacity: 1; pointer-events: auto; transform: translate(-50%, -45%) scale(1) rotate(0); }
+    .gift-wrap.open .gift-copy { opacity: 0; transition: opacity .2s ease; }
+    .gift-wrap.open .gift-button-wrap { opacity: 0; transform: translateY(30px) scale(.9); pointer-events: none; transition: all .35s ease; }
+    .invite-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; color: #ad5578; font-size: 9px; font-weight: 850; letter-spacing: .17em; text-transform: uppercase; }
+    .invite-card-top span:last-child { font-size: 18px; letter-spacing: 0; }
+    .invite-card h2 { margin: 0 0 7px; font-family: var(--serif); font-size: 34px; font-weight: 500; letter-spacing: -.045em; line-height: 1.02; }
+    .invite-card .to-line { margin: 0 0 18px; color: #8a7c8c; font-size: 12px; }
+    .invite-details { display: grid; gap: 9px; border-top: 1px dashed rgba(141,91,117,.25); border-bottom: 1px dashed rgba(141,91,117,.25); padding: 15px 0; }
+    .invite-detail { display: grid; grid-template-columns: 29px 1fr; align-items: start; gap: 10px; }
+    .invite-detail .detail-icon { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 10px; background: #fff0ed; font-size: 14px; }
+    .invite-detail strong { display: block; color: #4d354c; font-size: 12px; }
+    .invite-detail small { display: block; margin-top: 2px; color: #948493; font-size: 10px; line-height: 1.45; }
+    .invite-note { margin: 14px 0 0; border-radius: 13px; padding: 11px 13px; color: #81566d; background: #fff5f0; font-family: var(--serif); font-size: 14px; font-style: italic; line-height: 1.5; }
+    .invite-sign { display: flex; align-items: center; justify-content: space-between; margin-top: 15px; color: #987a8e; font-size: 11px; }
+    .invite-sign strong { color: var(--berry); font-family: var(--serif); font-size: 18px; font-style: italic; font-weight: 500; }
+    .invite-actions { display: flex; gap: 8px; margin-top: 17px; }
+    .invite-actions .btn { flex: 1; min-height: 43px; border-radius: 13px; padding: 0 12px; font-size: 11px; }
+    .celebrate-hint { position: absolute; z-index: 5; right: 20px; bottom: 16px; left: 20px; color: #987b8e; font-size: 10px; text-align: center; }
+    .toast { position: fixed; z-index: 20; right: 22px; bottom: 22px; max-width: min(350px, calc(100% - 44px)); border: 1px solid rgba(255,255,255,.8); border-radius: 15px; padding: 13px 17px; color: white; background: #573149; box-shadow: 0 12px 32px rgba(60,28,54,.2); font-size: 12px; opacity: 0; transform: translateY(12px); transition: all .25s ease; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .heart-burst { position: fixed; z-index: 30; left: var(--x); top: var(--y); color: var(--color); font-size: var(--size); pointer-events: none; animation: heartBurst var(--duration) ease-out forwards; }
+    .footer-note { margin: 25px auto 0; color: #a491a0; font-size: 10px; letter-spacing: .03em; text-align: center; }
+    .screen-enter { animation: enter .48s cubic-bezier(.2,.8,.2,1) both; }
+
+    @keyframes enter { from { opacity: 0; transform: translateY(12px) scale(.992); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes cardFloat { 0%,100% { transform: rotate(3deg) translateY(0); } 50% { transform: rotate(1deg) translateY(-10px); } }
+    @keyframes catBob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
+    @keyframes petHop { 0%,100% { transform: translateY(0) rotate(0); } 42% { transform: translateY(-13px) rotate(-3deg); } 58% { transform: translateY(-13px) rotate(3deg); } }
+    @keyframes sidekick { 0%,100% { transform: translateY(0) rotate(4deg); } 50% { transform: translateY(-9px) rotate(-5deg); } }
+    @keyframes orbit { to { transform: rotate(360deg); } }
+    @keyframes drift { 0%,100% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-13px) rotate(7deg); } }
+    @keyframes nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+    @keyframes sadNod { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-7deg) translateY(4px); } }
+    @keyframes balloonRise { 0% { transform: translate3d(0,0,0) rotate(-6deg); opacity: 0; } 10% { opacity: 1; } 50% { transform: translate3d(22px,-54vh,0) rotate(5deg); } 100% { transform: translate3d(-10px,-112vh,0) rotate(-7deg); opacity: 0; } }
+    @keyframes heartBurst { 0% { opacity: 0; transform: translate(0, 0) scale(.35) rotate(0); } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.25) rotate(var(--turn)); } }
+
+    @media (max-width: 800px) {
+      .page-wrap { width: min(100% - 28px, 680px); }
+      .topbar { min-height: 72px; }
+      .topnote { display: none; }
+      .door-card { grid-template-columns: 1fr; min-height: auto; border-radius: 27px; }
+      .door-copy { padding: 44px 32px 10px; }
+      .door-copy h1 { font-size: clamp(54px, 11vw, 76px); }
+      .door-stage { min-height: 510px; padding: 20px 34px 48px; }
+      .door-frame { width: min(100%, 410px); height: 460px; }
+      .door-card.opened { grid-template-columns: 1fr; }
+      .door-card.opened .door-copy { display: none; }
+      .door-card.opened .door-stage { min-height: 570px; padding: 34px; }
+      .hero-card { grid-template-columns: 1fr; min-height: auto; border-radius: 27px; }
+      .hero-copy { padding: 47px 32px 25px; }
+      .hero-copy h1 { max-width: 620px; font-size: clamp(55px, 12vw, 82px); }
+      .hero-intro { font-size: 14px; }
+      .hero-art { min-height: 450px; padding: 20px 30px 75px; }
+      .ticket-art { width: min(100%, 350px); min-height: 370px; }
+      .ticket-illustration { min-height: 136px; }
+      .ticket-cat { font-size: 103px; }
+      .hero-art::before { top: 5%; right: 8%; width: 85%; height: 78%; }
+      .hero-caption { bottom: 5%; }
+      .no-card { grid-template-columns: 1fr; }
+      .no-art { min-height: 230px; }
+      .no-art::before { width: 205px; height: 205px; }
+      .no-mascot { font-size: 125px; }
+      .no-sidekick { bottom: 10%; }
+      .no-copy { padding: 28px 30px 36px; }
+      .gift-wrap { min-height: 620px; }
+      .gift-copy { top: 34px; }
     }
-    @keyframes drift { 0%,100% { transform: translate3d(0,0,0) rotate(-8deg); } 50% { transform: translate3d(8px,-16px,0) rotate(10deg); } }
-    @keyframes tail-wag { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-16deg); } }
-    @keyframes cat-purr { from { transform: translateY(0) rotate(-.5deg); } to { transform: translateY(2px) rotate(.5deg); } }
-    @keyframes appear { from { opacity: 0; transform: translateY(14px) scale(.99); } to { opacity: 1; transform: none; } }
-    @keyframes stamp-in { from { opacity: 0; transform: scale(.65) rotate(-12deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
-    @keyframes heart-rise { 0% { transform: translate3d(0,0,0) rotate(-10deg) scale(.55); opacity: 0; } 12% { opacity: .93; } 100% { transform: translate3d(var(--drift, 18px),-108vh,0) rotate(var(--spin, 22deg)) scale(1.15); opacity: 0; } }
-    @keyframes heart-fall { 0% { transform: translate3d(0,-20px,0) rotate(-12deg) scale(.55); opacity: 0; } 10% { opacity: .96; } 100% { transform: translate3d(var(--drift, 18px),110vh,0) rotate(var(--spin, 22deg)) scale(1.13); opacity: 0; } }
-    @keyframes card-open { 0% { opacity: 0; transform: perspective(1100px) rotateY(12deg) translateY(12px) scale(.97); } 100% { opacity: 1; transform: perspective(1100px) rotateY(0) translateY(0) scale(1); } }
-    @keyframes pet-heart { 0% { opacity: 0; transform: translate(-50%,0) scale(.5); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(calc(-50% + var(--move, 12px)),-48px) scale(1.1); } }
-    @media (max-width: 760px) {
-      .page-shell { padding: 20px 14px; }
-      .color-screen { padding: 34px 24px 30px; border-radius: 27px; }
-      .invitation-card { min-height: unset; padding: 35px 25px 31px; border-radius: 27px; }
-      .intro-grid { grid-template-columns: 1fr; gap: 14px; margin-top: 26px; }
-      .copy { padding: 0; }
-      h1 { max-width: 520px; font-size: clamp(42px, 10vw, 57px); }
-      .intro-text { margin-bottom: 20px; }
-      .pet-panel { min-height: 306px; margin-top: 2px; }
-      .cat-touch { min-height: 214px; }
-      .footer-note { margin-top: 20px; }
-      .success-view { min-height: 500px; padding-top: 22px; }
-    }
-    @media (max-width: 430px) {
-      .color-screen { padding: 30px 17px 26px; }
-      .color-options { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-      .color-option { min-height: 94px; flex-direction: row; justify-content: flex-start; padding-left: 12px; }
-      .color-swatch { width: 39px; height: 39px; flex: 0 0 auto; }
-      .invitation-card { padding: 29px 19px 27px; }
-      .topline { font-size: 9px; }
-      .question { font-size: 20px; }
-      .button-stage { width: 100%; }
-      .choice { padding: 0 20px; }
-      .choice-yes { left: 2px; }
-      .choice-no { left: 172px; }
-      .pet-panel { min-height: 288px; padding-inline: 10px; }
-      .cat-touch { min-height: 198px; }
-      .date-details { grid-template-columns: 1fr; gap: 9px; }
-      .detail-card { min-height: 100px; }
-      .success-copy { font-size: 16px; }
+    @media (max-width: 560px) {
+      .page-wrap { width: calc(100% - 20px); }
+      .topbar { min-height: 66px; }
+      .brand { font-size: 12px; }
+      .brand-mark { width: 34px; height: 34px; border-radius: 12px; }
+      .main-area { padding: 4px 0 35px; }
+      .door-copy { padding: 36px 24px 9px; }
+      .door-copy h1 { margin-top: 19px; font-size: clamp(49px, 13vw, 66px); }
+      .door-copy p { margin-bottom: 22px; font-size: 13px; }
+      .door-stage { min-height: 440px; padding: 13px 18px 46px; }
+      .door-card.opened .door-stage { min-height: 515px; padding: 20px; }
+      .door-frame { width: min(100%, 370px); height: 395px; border-width: 8px; }
+      .door-reveal { inset: 10px 10px 0; padding: 24px 16px 20px; }
+      .door-reveal .inside-pet { font-size: 35px; }
+      .door-reveal h2 { font-size: clamp(28px, 8vw, 36px); }
+      .door-reveal p { max-width: 250px; margin: 9px 0 13px; font-size: 10px; }
+      .door-actions .btn { min-height: 41px; font-size: 10px; }
+      .door-leaf::before { inset: 11px; }
+      .hero-copy { padding: 39px 24px 21px; }
+      .hero-copy h1 { margin-top: 19px; font-size: clamp(49px, 14vw, 68px); }
+      .hero-intro { margin-bottom: 24px; font-size: 13px; }
+      .button-row { align-items: stretch; }
+      .button-row .btn { width: 100%; }
+      .small-note { margin-top: 17px; }
+      .hero-art { min-height: 393px; padding: 15px 22px 60px; }
+      .ticket-art { min-height: 330px; border-radius: 23px; padding: 21px; }
+      .ticket-title { font-size: 40px; }
+      .ticket-illustration { min-height: 113px; }
+      .ticket-cat { font-size: 86px; }
+      .moon { width: 132px; height: 132px; }
+      .hero-caption { font-size: 16px; }
+      .flow-card { border-radius: 25px; }
+      .flow-head { padding: 25px 21px 20px; }
+      .flow-topline { margin-bottom: 22px; }
+      .flow-head h1 { font-size: 38px; }
+      .flow-head p { font-size: 12px; }
+      .flow-body { padding: 23px 19px 28px; }
+      .date-choice-grid { grid-template-columns: 1fr; }
+      .date-choice { min-height: 165px; padding: 18px; }
+      .date-choice-title { font-size: 21px; }
+      .flow-actions { align-items: stretch; flex-direction: column; }
+      .flow-actions .btn { width: 100%; }
+      .flow-actions .hint { order: 2; max-width: none; text-align: center; }
+      .no-card { border-radius: 25px; }
+      .no-art { min-height: 195px; }
+      .no-mascot { font-size: 106px; }
+      .no-sidekick { right: 15%; bottom: 10%; font-size: 40px; }
+      .no-copy { padding: 22px 21px 28px; }
+      .no-copy h1 { font-size: 38px; }
+      .no-copy p { font-size: 13px; }
+      .no-end { margin: 18px auto; padding: 38px 22px; border-radius: 26px; }
+      .no-end h1 { font-size: 35px; }
+      .gift-wrap { min-height: 610px; border-radius: 25px; }
+      .gift-copy { top: 26px; }
+      .gift-copy h1 { font-size: 36px; }
+      .gift-copy p { max-width: 290px; margin: 0 auto; font-size: 12px; line-height: 1.5; }
+      .gift-button-wrap { padding-top: 90px; }
+      .invite-card { top: 51%; padding: 20px; }
+      .invite-card h2 { font-size: 30px; }
+      .invite-note { font-size: 13px; }
+      .invite-actions { flex-direction: column; }
+      .celebrate-hint { font-size: 9px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -503,297 +702,281 @@
   </style>
 </head>
 <body>
-  <main class="page-shell">
-    <div class="ambient-hearts" id="ambient-hearts" aria-hidden="true"></div>
-    <div class="heart-burst" id="heart-burst" aria-hidden="true"></div>
-    <section class="color-screen" id="color-screen" aria-labelledby="color-title">
-      <div class="topline"><span class="topline-mark">♡</span> сначала один вопрос <span class="topline-mark">♡</span></div>
-      <p class="color-intro">мне любопытно узнать…</p>
-      <h1 id="color-title">Какой цвет<br>тебе нравится?</h1>
-      <p class="color-help">Выбери свой любимый — и для тебя откроется маленькая открытка.</p>
-      <div class="color-options" role="group" aria-label="Выбери любимый цвет">
-        <button class="color-option" type="button" data-color="rose" data-color-name="розовый">
-          <span class="color-swatch swatch-rose" aria-hidden="true">♡</span><span>Розовый</span>
-        </button>
-        <button class="color-option" type="button" data-color="blue" data-color-name="голубой">
-          <span class="color-swatch swatch-blue" aria-hidden="true">♡</span><span>Голубой</span>
-        </button>
-        <button class="color-option" type="button" data-color="lilac" data-color-name="сиреневый">
-          <span class="color-swatch swatch-lilac" aria-hidden="true">♡</span><span>Сиреневый</span>
-        </button>
-        <button class="color-option" type="button" data-color="green" data-color-name="зелёный">
-          <span class="color-swatch swatch-green" aria-hidden="true">♡</span><span>Зелёный</span>
-        </button>
-      </div>
-      <p class="color-prompt" id="color-prompt" aria-live="polite">выбери один — и увидишь кое-что особенное ♡</p>
-    </section>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="page-wrap">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Маленькое свидание — на главную">
+        <span class="brand-mark" aria-hidden="true">♡</span>
+        <span>маленькое свидание</span>
+      </a>
+      <div class="topnote">один вечер · много нежности</div>
+    </header>
+    <main class="main-area" id="app" aria-live="polite"></main>
+    <p class="footer-note">сделано с нежностью и одной очень серьёзной командой котиков ♡</p>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <article class="invitation-card" id="invitation-card" aria-label="Приглашение на свидание" hidden>
-      <div class="topline"><span class="topline-mark">♡</span> маленькое приглашение <span class="topline-mark">♡</span></div>
-      <p class="chosen-color" id="chosen-color" hidden></p>
-
-      <section class="intro-grid" id="intro-view" aria-labelledby="main-title">
-        <div class="copy">
-          <p class="eyebrow">для моего самого любимого человека</p>
-      <h1 id="main-title" tabindex="-1">У меня к тебе<br>один важный <em>вопрос…</em></h1>
-          <p class="intro-text">Я придумала кое-что приятное для нас двоих. Но сначала мне нужно узнать кое-что очень важное.</p>
-          <p class="question-label">внимание, вопрос</p>
-          <p class="question">Ты пойдёшь со мной на свидание?</p>
-          <div class="button-stage" id="button-stage" aria-label="Выбери ответ">
-            <button class="choice choice-yes" id="yes-button" type="button">Да, с радостью! ♡</button>
-            <button class="choice choice-no" id="no-button" type="button" aria-label="Нет (ой, кажется, кнопка убегает)">Нет</button>
-          </div>
-          <p class="reaction" id="reaction" aria-live="polite">попробуй нажать «Нет»… если догонишь!</p>
-        </div>
-
-        <aside class="pet-panel" aria-label="Котик, которого можно погладить">
-          <span class="pet-ribbon">погладь меня!</span>
-          <button class="cat-touch" id="cat-touch" type="button" aria-label="Погладить лежащего котика">
-            <svg viewBox="0 0 340 260" role="img" aria-labelledby="cat-title cat-desc">
-              <title id="cat-title">Рыжевато-кремовый котик лежит клубочком</title>
-              <desc id="cat-desc">Котик с закрытыми глазами дремлет на мягкой подушке.</desc>
-              <ellipse cx="170" cy="211" rx="126" ry="20" fill="#e7c7ba" opacity=".52"/>
-              <ellipse cx="171" cy="204" rx="126" ry="19" fill="#f2d9cf"/>
-              <path class="cat-tail" d="M95 161 C54 169 56 216 96 218 C120 220 131 202 118 189 C110 181 97 184 94 194" fill="none" stroke="#e8b78e" stroke-width="19" stroke-linecap="round"/>
-              <path d="M93 163 C63 171 65 207 95 209" fill="none" stroke="#f5d2b0" stroke-width="5" stroke-linecap="round" opacity=".9"/>
-              <path d="M94 178 C113 141 154 124 211 133 C250 139 273 166 268 190 C264 211 242 218 211 213 L129 211 C103 210 85 198 94 178Z" fill="#eec39e" stroke="#d8a57f" stroke-width="2"/>
-              <path d="M126 151 C143 141 165 138 184 142 C166 156 164 182 180 208 L137 208 C116 198 111 171 126 151Z" fill="#f7e5d2" opacity=".92"/>
-              <path d="M217 159 C233 157 246 166 248 180 C250 193 239 202 226 199 C215 197 208 185 212 173Z" fill="#f7e5d2"/>
-              <ellipse cx="215" cy="193" rx="19" ry="10" fill="#fff0e4"/>
-              <ellipse cx="246" cy="191" rx="17" ry="9" fill="#fff0e4"/>
-              <path d="M200 207 C212 202 225 202 234 207" fill="none" stroke="#d29c78" stroke-width="3" stroke-linecap="round"/>
-              <path d="M234 207 C243 201 255 202 262 208" fill="none" stroke="#d29c78" stroke-width="3" stroke-linecap="round"/>
-              <path d="M116 157 C104 134 115 105 138 90 C157 78 184 80 204 95 C222 109 228 133 218 153 C207 174 185 183 157 177 C138 173 123 167 116 157Z" fill="#f0c8a6" stroke="#d8a57f" stroke-width="2"/>
-              <path d="M121 118 L117 83 Q116 76 123 81 L149 100Z" fill="#e8b58e" stroke="#d8a57f" stroke-width="2" stroke-linejoin="round"/>
-              <path d="M184 96 L205 78 Q211 73 212 82 L211 116Z" fill="#e8b58e" stroke="#d8a57f" stroke-width="2" stroke-linejoin="round"/>
-              <path d="M126 91 L141 102 L122 109Z" fill="#d8959c" opacity=".82"/>
-              <path d="M194 94 L205 86 L204 105Z" fill="#d8959c" opacity=".82"/>
-              <path d="M143 129 Q151 137 159 129" fill="none" stroke="#795a55" stroke-width="3" stroke-linecap="round"/>
-              <path d="M181 129 Q189 137 197 129" fill="none" stroke="#795a55" stroke-width="3" stroke-linecap="round"/>
-              <ellipse cx="139" cy="143" rx="10" ry="5" fill="#e99b9b" opacity=".65"/>
-              <ellipse cx="201" cy="143" rx="10" ry="5" fill="#e99b9b" opacity=".65"/>
-              <path d="M166 140 Q170 136 174 140 L170 144Z" fill="#b77e7d"/>
-              <path d="M170 144 Q166 150 160 147 M170 144 Q174 150 180 147" fill="none" stroke="#795a55" stroke-width="2" stroke-linecap="round"/>
-              <path d="M131 145 L103 141 M133 150 L104 154 M207 145 L235 141 M205 150 L234 154" fill="none" stroke="#c28e75" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
-              <path d="M150 110 Q158 103 165 109 M180 105 Q188 102 194 109" fill="none" stroke="#dba67f" stroke-width="4" stroke-linecap="round" opacity=".7"/>
-              <text x="73" y="86" fill="#cd7e8c" font-family="Georgia,serif" font-size="20">z</text>
-              <text x="57" y="69" fill="#cd7e8c" font-family="Georgia,serif" font-size="14">z</text>
-              <path d="M265 96 C271 89 280 89 285 96 C290 89 300 90 304 97 C310 108 287 123 285 124 C282 122 260 108 265 96Z" fill="#e9a0aa" opacity=".77"/>
-            </svg>
-          </button>
-          <p class="pet-instruction" id="pet-instruction">нажми, чтобы погладить котика</p>
-          <p class="purr-count" id="purr-count">мурчаний: 0</p>
-        </aside>
-      </section>
-
-      <section class="success-view" id="success-view" aria-labelledby="success-title" aria-live="polite">
-        <div class="success-stamp" aria-hidden="true">♡</div>
-        <p class="success-kicker">я знала, что ты скажешь «да»</p>
-        <h2 id="success-title">Ура! <em>Свидание</em> будет ♡</h2>
-        <p class="success-copy">Теперь осталось только выбрать день и приготовиться провести время вместе. Я уже улыбаюсь, представляя нашу встречу.</p>
-        <div class="date-details">
-          <div class="detail-card">
-            <div class="detail-label"><span aria-hidden="true">☼</span> дата</div>
-            <p class="detail-value">Выберем вместе</p>
-            <p class="detail-caption">главное — провести этот день вдвоём</p>
-          </div>
-          <div class="detail-card">
-            <div class="detail-label"><span aria-hidden="true">⌖</span> место</div>
-            <p class="detail-value">Мой маленький сюрприз</p>
-            <p class="detail-caption">пока оставлю это в секрете…</p>
-          </div>
-        </div>
-        <p class="waiting-note">Буду ждать тебя. Очень-очень ♡</p>
-        <button class="back-button" id="back-button" type="button">↶ ещё раз к вопросу</button>
-      </section>
-      <div class="footer-note" id="footer-note">сделано с любовью <span>♥</span> и маленькой надеждой</div>
-    </article>
-  </main>
   <script>
-    (() => {
-      const colorScreen = document.getElementById('color-screen');
-      const invitationCard = document.getElementById('invitation-card');
-      const chosenColor = document.getElementById('chosen-color');
-      const intro = document.getElementById('intro-view');
-      const success = document.getElementById('success-view');
-      const yesButton = document.getElementById('yes-button');
-      const noButton = document.getElementById('no-button');
-      const reaction = document.getElementById('reaction');
-      const cat = document.getElementById('cat-touch');
-      const petInstruction = document.getElementById('pet-instruction');
-      const purrCount = document.getElementById('purr-count');
-      const burst = document.getElementById('heart-burst');
-      const ambient = document.getElementById('ambient-hearts');
-      const footer = document.getElementById('footer-note');
-      let purrs = 0;
-      let noEscapes = 0;
-      let hasSaidYes = false;
+    const dateOptions = [
+      { id: "dream", title: "Спектакль «Мечта»", date: "2026-11-14" },
+      { id: "three-women", title: "Спектакль «Три высокие женщины»", date: "2026-11-21" }
+    ];
+    const noPrompts = [
+      { text: "Ты точно не хочешь? Котик уже приготовил для тебя сердечко.", emoji: "🐈", pal: "💌" },
+      { text: "Хомячок очень надеется, что ты ещё передумаешь…", emoji: "🐹", pal: "🍰" },
+      { text: "Котик репетирует самое милое «ну пожа-а-алуйста».", emoji: "🐹", pal: "🧣" },
+      { text: "А вдруг наше свидание станет хорошим воспоминанием?", emoji: "🐈", pal: "✨" },
+      { text: "Я правда буду рада провести этот вечер вместе с тобой.", emoji: "🐼", pal: "☁️" },
+      { text: "Котик прислал ещё одно маленькое сердечко. Держи: ♡", emoji: "🐈", pal: "🧸" },
+      { text: "Среди двух спектаклей, может, один всё-таки тебе понравится?", emoji: "🐹", pal: "🗓️" },
+      { text: "В коробочке ждёт готовое приглашение, собранное для тебя.", emoji: "🐰", pal: "🎁" },
+      { text: "Последнее-препоследнее уточнение: точно-точно не хочется?", emoji: "🐱", pal: "🥺" },
+      { text: "Окей. Твой ответ принят, больше не уговариваю.", emoji: "🐻", pal: "💗" }
+    ];
+    const state = {
+      screen: "landing",
+      doorOpened: false,
+      noCount: 0,
+      dateId: "",
+      date: "",
+      time: "20:00",
+      opened: false
+    };
+    const app = document.getElementById("app");
+    const toast = document.getElementById("toast");
+    let toastTimer;
 
-      const littleHearts = ['♡', '♥', '💕', '✦'];
-      function currentHeartColors() {
-        const styles = getComputedStyle(document.documentElement);
-        return ['--rose', '--deep-rose', '--blush'].map((name) => styles.getPropertyValue(name).trim()).concat('#fff4f4');
+    function safe(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+    function prettyDate(value) {
+      if (!value) return "";
+      const parsed = new Date(`${value}T12:00:00`);
+      const formatted = new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "long", weekday: "long" }).format(parsed);
+      return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+    }
+    function progress(step, total = 1) {
+      return `<div class="progress" aria-label="Шаг ${step} из ${total}">${Array.from({ length: total }, (_, index) => index + 1).map(n => `<span class="progress-dot ${n <= step ? "active" : ""}"></span>`).join("")}</div>`;
+    }
+    function flowHeader(step, label, title, copy, backAction, total = 1) {
+      return `<div class="flow-head"><div class="flow-topline"><button class="back-button" type="button" data-action="${backAction}"><span aria-hidden="true">←</span> Назад</button><span class="step-label">${label}</span>${progress(step, total)}</div><h1>${title}</h1><p>${copy}</p></div>`;
+    }
+    function renderLanding() {
+      return `<section class="door-card screen-enter ${state.doorOpened ? "opened" : ""}" id="door-card">
+        <div class="door-copy">
+          <div class="eyebrow"><span class="sparkle">✦</span> маленькое признание</div>
+          <h1>Хочу кое-что<br><em>тебе сказать…</em></h1>
+          <p>У меня для нас есть две даты. Открой дверь — и узнаешь.</p>
+          <div class="button-row"><button class="btn btn-primary" type="button" data-action="open-door">Открыть дверь <span aria-hidden="true">→</span></button></div>
+          <div class="small-note"><span>✧</span> внутри — кое-что только для тебя</div>
+        </div>
+        <div class="door-stage" role="group" aria-label="Дверь, за которой спрятано приглашение">
+          <div class="door-halo"></div>
+          <div class="door-frame">
+            <div class="door-reveal" id="door-reveal" aria-live="polite">
+              <span class="inside-pet" aria-hidden="true">🐈</span>
+              <span class="inside-label">лично для тебя</span>
+              <h2>Хочу позвать<br><em>тебя на свидание</em></h2>
+              <p>Хочу провести этот вечер с тобой. На выбор — две даты.</p>
+              <div class="button-row door-actions">
+                <button class="btn btn-primary" type="button" data-action="yes">Да, с удовольствием ♡</button>
+                <button class="btn btn-quiet" type="button" data-action="no">Нет, спасибо</button>
+              </div>
+            </div>
+            <button class="door-leaf" type="button" data-action="open-door" aria-label="Открыть дверь">
+              <span class="door-panel upper" aria-hidden="true"></span><span class="door-panel lower" aria-hidden="true"></span>
+              <span class="door-heart" aria-hidden="true">♡</span><span class="door-knob" aria-hidden="true"></span>
+              <span class="door-open-hint" aria-hidden="true">нажми, чтобы открыть</span>
+            </button>
+            <div class="door-floor-note" aria-hidden="true">там начинается наш маленький вечер</div>
+          </div>
+        </div>
+      </section>`;
+    }
+    function renderNo() {
+      const prompt = noPrompts[Math.max(0, Math.min(state.noCount - 1, noPrompts.length - 1))];
+      const promptNumber = Math.max(1, Math.min(state.noCount, noPrompts.length));
+      return `<section class="no-card screen-enter">
+        <div class="no-art"><span class="no-mascot" aria-hidden="true">${prompt.emoji}</span><span class="no-sidekick" aria-hidden="true">${prompt.pal}</span></div>
+        <div class="no-copy">
+          <div class="no-count">уточнение ${String(promptNumber).padStart(2,"0")} / 10</div>
+          <h1>Совсем-совсем?</h1>
+          <p>${safe(prompt.text)}</p>
+          <div class="button-row">
+            <button class="btn btn-primary" type="button" data-action="yes">Ладно, давай 💗</button>
+            <button class="btn btn-quiet" type="button" data-action="no-again">Нет, точно</button>
+          </div>
+          <button class="no-exit" type="button" data-action="finish-no">Это окончательный ответ</button>
+        </div>
+      </section>`;
+    }
+    function renderNoEnd() {
+      return `<section class="no-end screen-enter">
+        <div class="end-pet" aria-hidden="true">🐈‍⬛</div>
+        <div class="eyebrow" style="justify-content:center"><span class="sparkle">✦</span> котик отправляет сердечки</div>
+        <h1>Понимаю 💌</h1>
+        <p>Больше не уговариваю. Спасибо за честный ответ — если однажды захочешь, приглашение будет ждать тебя здесь.</p>
+        <button class="btn btn-quiet" type="button" data-action="reset">Закрыть приглашение</button>
+      </section>`;
+    }
+    function renderDate() {
+      return `<section class="flow-card screen-enter">
+        ${flowHeader(1, "две даты", "Какой вечер выберешь?", "Два спектакля и две даты — оба начинаются в 20:00.", "landing")}
+        <div class="flow-body">
+          <div class="date-choice-grid" role="group" aria-label="Выбери одну из двух дат">
+            ${dateOptions.map(option => `<button class="date-choice ${state.dateId === option.id ? "selected" : ""}" type="button" data-action="choose-date" data-date-id="${option.id}" aria-pressed="${state.dateId === option.id}">
+              <span class="date-choice-icon" aria-hidden="true">🎭</span><span class="date-choice-title">${safe(option.title)}</span><span class="date-choice-date">🗓️ ${safe(prettyDate(option.date))} · 20:00</span>
+            </button>`).join("")}
+          </div>
+          <div class="flow-actions"><span class="hint">Выбери одну дату.</span><button class="btn btn-primary" type="button" data-action="to-gift" ${state.dateId ? "" : "disabled"}>Собрать приглашение <span aria-hidden="true">→</span></button></div>
+        </div>
+      </section>`;
+    }
+    function renderGift() {
+      return `<section class="gift-wrap screen-enter ${state.opened ? "open" : ""}" id="gift-wrap">
+        <div class="gift-glow"></div><div class="balloon-field" id="balloon-field" aria-hidden="true"></div>
+        <div class="gift-copy"><div class="eyebrow"><span class="sparkle">✦</span> финальный сюрприз</div><h1>Тут кое-что для тебя</h1><p>Открой коробочку — внутри уже собрано твоё приглашение.</p></div>
+        <div class="gift-button-wrap"><button class="gift-box" type="button" data-action="open-gift" aria-label="Открыть коробочку с приглашением"><span class="gift-lid"></span><span class="gift-base"></span><span class="gift-ribbon"></span><span class="gift-pawmark">♡</span></button><div class="gift-tap">нажми, чтобы открыть <span>↗</span></div></div>
+        <article class="invite-card" id="invite-card" aria-label="Твоё приглашение">
+          ${renderInviteCard()}
+        </article>
+        <div class="celebrate-hint">${state.opened ? "Сохрани приглашение или просто оставь эту страницу открытой ♡" : "Внутри — выбранный спектакль и дата."}</div>
+      </section>`;
+    }
+    function renderInviteCard() {
+      const option = dateOptions.find(item => item.id === state.dateId);
+      return `<div class="invite-card-top"><span>официальное приглашение</span><span aria-hidden="true">♡</span></div>
+        <h2>Сходим<br>на свидание?</h2>
+        <p class="to-line">Ты приглашён пойти со мной на спектакль.</p>
+        <div class="invite-details">
+          <div class="invite-detail"><span class="detail-icon">🗓️</span><div><strong>${safe(prettyDate(state.date))}</strong><small>начало в ${safe(state.time || "20:00")}</small></div></div>
+          <div class="invite-detail"><span class="detail-icon">🎭</span><div><strong>${safe(option?.title || "Спектакль")}</strong><small>вечер вдвоём ♡</small></div></div>
+        </div>
+        <div class="invite-sign"><span>с нежностью,</span><strong>от меня ♡</strong></div>
+        <div class="invite-actions"><button class="btn btn-primary" type="button" data-action="copy-invite">Скопировать приглашение</button><button class="btn btn-quiet" type="button" data-action="reset">Сначала</button></div>`;
+    }
+    function render() {
+      const views = {
+        landing: renderLanding,
+        no: renderNo,
+        noEnd: renderNoEnd,
+        date: renderDate,
+        gift: renderGift
+      };
+      app.innerHTML = (views[state.screen] || renderLanding)();
+      if (state.screen === "gift" && state.opened) {
+        requestAnimationFrame(() => balloonBurst());
       }
-
-      for (let i = 0; i < 17; i++) {
-        const heart = document.createElement('span');
-        heart.className = 'ambient-heart';
-        heart.textContent = i % 4 === 0 ? '♡' : '♥';
-        heart.style.left = `${(i * 41 + 8) % 100}%`;
-        heart.style.top = `${(i * 67 + 6) % 100}%`;
-        heart.style.fontSize = `${12 + (i % 4) * 5}px`;
-        heart.style.setProperty('--duration', `${7 + (i % 5)}s`);
-        heart.style.setProperty('--delay', `${(i % 7) * -.8}s`);
-        ambient.appendChild(heart);
+    }
+    function go(screen) { state.screen = screen; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2700);
+    }
+    function heartBurst(count = 12) {
+      const colors = ["#f36b7c", "#be5780", "#ffc87d", "#a96eb0", "#ff9aa8"];
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement("span");
+        heart.className = "heart-burst";
+        heart.textContent = ["♡", "♥", "✦", "💗"][Math.floor(Math.random() * 4)];
+        heart.style.setProperty("--x", `${30 + Math.random() * 40}vw`);
+        heart.style.setProperty("--y", `${28 + Math.random() * 42}vh`);
+        heart.style.setProperty("--dx", `${Math.round((Math.random() - .5) * 230)}px`);
+        heart.style.setProperty("--dy", `${Math.round(-70 - Math.random() * 230)}px`);
+        heart.style.setProperty("--turn", `${Math.round((Math.random() - .5) * 160)}deg`);
+        heart.style.setProperty("--size", `${14 + Math.random() * 18}px`);
+        heart.style.setProperty("--duration", `${1.5 + Math.random() * 1.3}s`);
+        heart.style.setProperty("--color", colors[Math.floor(Math.random() * colors.length)]);
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 3100);
       }
+    }
+    function balloonBurst() {
+      const field = document.getElementById("balloon-field");
+      if (!field) return;
+      field.innerHTML = "";
+      const balloons = ["🎈", "🎈", "💗", "🎈", "💖", "🎈", "💝", "🎈", "💗", "🎈", "✨", "🎈"];
+      balloons.forEach((emoji, index) => {
+        const balloon = document.createElement("span");
+        balloon.className = "balloon";
+        balloon.textContent = emoji;
+        balloon.style.left = `${4 + Math.random() * 90}%`;
+        balloon.style.setProperty("--duration", `${5.1 + Math.random() * 2.5}s`);
+        balloon.style.setProperty("--delay", `${Math.random() * .9}s`);
+        balloon.style.fontSize = `${32 + Math.random() * 22}px`;
+        field.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 8500 + index * 25);
+      });
+      heartBurst(24);
+    }
+    function inviteText() {
+      const option = dateOptions.find(item => item.id === state.dateId);
+      return `Приглашение 💌\n\nХочу позвать тебя на свидание!\nТы приглашён пойти со мной на ${option?.title || "спектакль"}.\n${prettyDate(state.date)} в ${state.time}\n\nС нежностью, от меня ♡`;
+    }
 
-      function sendHearts(count, fromBottom = true) {
-        for (let i = 0; i < count; i++) {
-          window.setTimeout(() => {
-            const particle = document.createElement('span');
-            particle.className = 'heart-particle';
-            particle.textContent = littleHearts[Math.floor(Math.random() * littleHearts.length)];
-            particle.style.setProperty('--x', `${Math.random() * 100}%`);
-            particle.style.setProperty('--size', `${14 + Math.random() * 23}px`);
-            particle.style.setProperty('--life', `${2.8 + Math.random() * 2.4}s`);
-            particle.style.setProperty('--drift', `${Math.round(Math.random() * 100 - 50)}px`);
-            particle.style.setProperty('--spin', `${Math.round(Math.random() * 80 - 40)}deg`);
-            const heartColors = currentHeartColors();
-            particle.style.setProperty('--color', heartColors[Math.floor(Math.random() * heartColors.length)]);
-            if (!fromBottom) particle.style.bottom = `${15 + Math.random() * 35}%`;
-            burst.appendChild(particle);
-            window.setTimeout(() => particle.remove(), 5500);
-          }, i * 42);
+    app.addEventListener("click", async event => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      const action = button.dataset.action;
+      if (action === "open-door") {
+        if (state.doorOpened) return;
+        state.doorOpened = true;
+        document.getElementById("door-card")?.classList.add("opened");
+        window.setTimeout(() => document.querySelector(".door-reveal [data-action=\"yes\"]")?.focus(), 1050);
+      } else if (action === "yes") {
+        heartBurst(10);
+        go("date");
+      } else if (action === "no") {
+        state.noCount = 1;
+        go("no");
+      } else if (action === "no-again") {
+        if (state.noCount >= noPrompts.length) {
+          state.screen = "noEnd";
+          render();
+          heartBurst(18);
+        } else {
+          state.noCount += 1;
+          render();
+          heartBurst(7);
         }
-      }
-
-      function rainHearts(count) {
-        for (let i = 0; i < count; i++) {
-          window.setTimeout(() => {
-            const particle = document.createElement('span');
-            particle.className = 'heart-particle heart-rain';
-            particle.textContent = littleHearts[Math.floor(Math.random() * littleHearts.length)];
-            particle.style.setProperty('--x', `${Math.random() * 100}%`);
-            particle.style.setProperty('--size', `${15 + Math.random() * 25}px`);
-            particle.style.setProperty('--life', `${2.5 + Math.random() * 2.3}s`);
-            particle.style.setProperty('--drift', `${Math.round(Math.random() * 100 - 50)}px`);
-            particle.style.setProperty('--spin', `${Math.round(Math.random() * 100 - 50)}deg`);
-            const heartColors = currentHeartColors();
-            particle.style.setProperty('--color', heartColors[Math.floor(Math.random() * heartColors.length)]);
-            burst.appendChild(particle);
-            window.setTimeout(() => particle.remove(), 5200);
-          }, i * 35);
+      } else if (action === "finish-no") {
+        state.screen = "noEnd";
+        render();
+        heartBurst(14);
+      } else if (action === "choose-date") {
+        const selected = dateOptions.find(option => option.id === button.dataset.dateId);
+        if (!selected) return;
+        state.dateId = selected.id;
+        state.date = selected.date;
+        state.time = "20:00";
+        render();
+      } else if (action === "to-gift") {
+        if (!state.dateId) return;
+        state.opened = false;
+        go("gift");
+      } else if (action === "open-gift") {
+        state.opened = true;
+        render();
+      } else if (action === "copy-invite") {
+        try {
+          await navigator.clipboard.writeText(inviteText());
+          showToast("Приглашение скопировано 💌");
+        } catch {
+          showToast("Не получилось скопировать автоматически — выдели текст карточки.");
         }
+      } else if (action === "reset") {
+        Object.assign(state, { screen: "landing", doorOpened: false, noCount: 0, dateId: "", date: "", time: "20:00", opened: false });
+        go("landing");
+      } else if (action === "landing") {
+        go("landing");
+      } else if (action === "date") {
+        go("date");
       }
+    });
 
-      document.querySelectorAll('.color-option').forEach((button) => {
-        button.addEventListener('click', () => {
-          document.documentElement.dataset.theme = button.dataset.color;
-          chosenColor.textContent = `твой выбор — ${button.dataset.colorName} ♡`;
-          chosenColor.hidden = false;
-          colorScreen.hidden = true;
-          invitationCard.hidden = false;
-          void invitationCard.offsetWidth;
-          invitationCard.classList.add('is-open');
-          document.getElementById('main-title').focus({ preventScroll: true });
-          rainHearts(88);
-        });
-      });
-
-      function moveNoButton(event) {
-        const firstRun = !noButton.classList.contains('is-running');
-        const oldRect = noButton.getBoundingClientRect();
-        const margin = Math.min(16, Math.max(8, window.innerWidth * .035));
-        const buttonWidth = noButton.offsetWidth;
-        const buttonHeight = noButton.offsetHeight;
-        const maxLeft = Math.max(margin, window.innerWidth - buttonWidth - margin);
-        const maxTop = Math.max(margin, window.innerHeight - buttonHeight - margin);
-        const yesRect = yesButton.getBoundingClientRect();
-        const pointerX = event?.clientX ?? oldRect.left + oldRect.width / 2;
-        const pointerY = event?.clientY ?? oldRect.top + oldRect.height / 2;
-        const yesCenterX = yesRect.left + yesRect.width / 2;
-        const yesCenterY = yesRect.top + yesRect.height / 2;
-        const oldCenterX = oldRect.left + oldRect.width / 2;
-        const oldCenterY = oldRect.top + oldRect.height / 2;
-        const minDistance = Math.max(95, Math.min(185, Math.min(window.innerWidth, window.innerHeight) * .23));
-        let nextLeft = margin;
-        let nextTop = margin;
-        let bestScore = -1;
-        for (let attempt = 0; attempt < 28; attempt++) {
-          const candidateLeft = margin + Math.random() * Math.max(0, maxLeft - margin);
-          const candidateTop = margin + Math.random() * Math.max(0, maxTop - margin);
-          const centerX = candidateLeft + buttonWidth / 2;
-          const centerY = candidateTop + buttonHeight / 2;
-          const cursorDistance = Math.hypot(centerX - pointerX, centerY - pointerY);
-          const yesDistance = Math.hypot(centerX - yesCenterX, centerY - yesCenterY);
-          const runDistance = Math.hypot(centerX - oldCenterX, centerY - oldCenterY);
-          const score = Math.min(cursorDistance, yesDistance, runDistance);
-          if (score > bestScore) {
-            bestScore = score;
-            nextLeft = candidateLeft;
-            nextTop = candidateTop;
-          }
-          if (score >= minDistance) break;
-        }
-        if (firstRun) {
-          noButton.classList.add('is-running');
-          noButton.style.left = `${oldRect.left}px`;
-          noButton.style.top = `${oldRect.top}px`;
-        }
-        const dashAway = () => {
-          noButton.style.left = `${nextLeft}px`;
-          noButton.style.top = `${nextTop}px`;
-          noButton.style.transform = `rotate(${Math.round(Math.random() * 18 - 9)}deg) scale(1.04)`;
-        };
-        if (firstRun) window.requestAnimationFrame(dashAway); else dashAway();
-        noEscapes++;
-        const messages = ['ой! убежала на другой край экрана 😳', 'не поймаешь — я очень быстрая!', 'котик помог мне сбежать 🐾', 'попробуй ещё раз… если сможешь ♡'];
-        reaction.textContent = messages[(noEscapes - 1) % messages.length];
-      }
-
-      noButton.addEventListener('pointerenter', (event) => { if (event.pointerType !== 'touch') moveNoButton(event); });
-      noButton.addEventListener('pointerdown', (event) => { event.preventDefault(); moveNoButton(event); });
-      noButton.addEventListener('click', (event) => { event.preventDefault(); moveNoButton(event); });
-      noButton.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); moveNoButton(event); }
-      });
-
-      cat.addEventListener('click', (event) => {
-        purrs++;
-        cat.classList.remove('is-purring');
-        void cat.offsetWidth;
-        cat.classList.add('is-purring');
-        window.setTimeout(() => cat.classList.remove('is-purring'), 1000);
-        purrCount.textContent = `мурчаний: ${purrs}`;
-        petInstruction.textContent = ['мррр… ещё погладишь? ♡', 'котик счастлив и мурчит', 'погладь ещё разок!'][purrs % 3];
-        const bounds = cat.getBoundingClientRect();
-        const heart = document.createElement('span');
-        heart.className = 'pet-heart';
-        heart.textContent = '♥';
-        heart.style.left = `${event.clientX ? event.clientX - bounds.left : bounds.width / 2}px`;
-        heart.style.top = `${event.clientY ? event.clientY - bounds.top : bounds.height / 2}px`;
-        heart.style.setProperty('--move', `${Math.round(Math.random() * 30 - 15)}px`);
-        cat.appendChild(heart);
-        window.setTimeout(() => heart.remove(), 1000);
-      });
-
-      yesButton.addEventListener('click', () => {
-        hasSaidYes = true;
-        intro.hidden = true;
-        success.classList.add('is-visible');
-        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        footer.textContent = 'уже считаю дни до нашей встречи';
-        sendHearts(72);
-      });
-
-      document.getElementById('back-button').addEventListener('click', () => {
-        success.classList.remove('is-visible');
-        intro.hidden = false;
-        footer.innerHTML = 'сделано с любовью <span>♥</span> и маленькой надеждой';
-        if (hasSaidYes) reaction.textContent = 'можно сказать «да» ещё раз — я не против ♡';
-        intro.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
-    })();
+    render();
   </script>
 </body>
 </html>
